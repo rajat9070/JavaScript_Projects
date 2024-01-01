@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Employee CRUD</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+    }
+
+    #employeeList {
+      margin-bottom: 20px;
+    }
+
+    table {
+      border-collapse: collapse;
+      width: 100%;
+    }
+
+    table, th, td {
+      border: 1px solid #ddd;
+    }
+
+    th, td {
+      padding: 8px;
+      text-align: left;
+    }
+
+    th {
+      background-color: #f2f2f2;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    .btn-delete {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Employee CRUD</h2>
+
+  <div id="employeeList">
+    <h3>Employee List</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Position</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody id="employeeTableBody"></tbody>
+    </table>
+  </div>
+
+  <h3>Add Employee</h3>
+  <form id="employeeForm">
+    <label for="name">Name:</label>
+    <input type="text" id="name" required>
+    <label for="position">Position:</label>
+    <input type="text" id="position" required>
+    <button type="button" onclick="addEmployee()">Add Employee</button>
+  </form>
+
+  <script>
+    // Sample employee data
+    let employees = [
+      { id: 1, name: 'John Doe', position: 'Developer' },
+      { id: 2, name: 'Jane Smith', position: 'Designer' },
+      // Add more sample data if needed
+    ];
+
+    // Function to display employees in the table
+    function displayEmployees() {
+      const tableBody = document.getElementById('employeeTableBody');
+      tableBody.innerHTML = '';
+
+      employees.forEach(employee => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${employee.id}</td>
+          <td>${employee.name}</td>
+          <td>${employee.position}</td>
+          <td>
+            <button onclick="editEmployee(${employee.id})">Edit</button>
+            <button class="btn-delete" onclick="deleteEmployee(${employee.id})">Delete</button>
+          </td>
+        `;
+        tableBody.appendChild(row);
+      });
+    }
+
+    // Function to add a new employee
+    function addEmployee() {
+      const nameInput = document.getElementById('name');
+      const positionInput = document.getElementById('position');
+
+      const newEmployee = {
+        id: employees.length + 1,
+        name: nameInput.value,
+        position: positionInput.value,
+      };
+
+      employees.push(newEmployee);
+      displayEmployees();
+
+      // Clear the form
+      nameInput.value = '';
+      positionInput.value = '';
+    }
+
+    // Function to edit an existing employee
+    function editEmployee(employeeId) {
+      const employee = employees.find(emp => emp.id === employeeId);
+
+      if (employee) {
+        const name = prompt('Enter new name:', employee.name);
+        const position = prompt('Enter new position:', employee.position);
+
+        if (name !== null && position !== null) {
+          employee.name = name;
+          employee.position = position;
+          displayEmployees();
+        }
+      }
+    }
+
+    // Function to delete an employee
+    function deleteEmployee(employeeId) {
+      employees = employees.filter(emp => emp.id !== employeeId);
+      displayEmployees();
+    }
+
+    // Initial display
+    displayEmployees();
+  </script>
+
+</body>
+</html>
